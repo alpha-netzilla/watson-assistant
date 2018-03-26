@@ -11,8 +11,8 @@ module Watson
 
     class Dialog      
       def initialize(username: "", password: "", workspace_id: "")
-        url = "https://#{username}:#{password}@gateway.watsonplatform.net/conversation/api"
-        version="2017-02-03"
+        url = "https://#{username}:#{password}@gateway.watsonplatform.net/assistant/api"
+        version="2018-02-16"
         @endpoint = "#{url}/v1/workspaces/#{workspace_id}/message?version=#{version}"
       end
 
