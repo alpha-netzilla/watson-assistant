@@ -38,7 +38,7 @@ export STORAGE="hash" # Default
 ```ruby
 require 'watson/assistant'
 
-manage = Watson::Assistant::Manage.new(
+manager = Watson::Assistant::Manage.new(
   username: ENV["USERNAME"],
   password: ENV["PASSWORD"],
   workspace_id: ENV["WORKSPACE_ID"],
@@ -47,18 +47,18 @@ manage = Watson::Assistant::Manage.new(
 )
 
 # Get a greet message from a assistant service.
-puts response1 = manage.talk("user1", "")
+puts response1 = manager.talk("user1", "")
 #=> {user: user1, status_code: 200, output: [\"What would you like me to do?\"]}
 
 # Get a response to a user's input.
-puts response2 = manage.talk("user1", "I would like you to ...")
+puts response2 = manager.talk("user1", "I would like you to ...")
 #=> {user: user1, status_code: 200, output: [\"I help you ...\"]}
 
 # Check if the user exists
-puts manage.has_key?("user1")
+puts manager.has_key?("user1")
 
 # Delete the user
-puts manage.delete("user1")
+puts manager.delete("user1")
 ```
 
 ## Development
