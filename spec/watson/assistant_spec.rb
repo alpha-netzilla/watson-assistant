@@ -8,7 +8,7 @@ RSpec.describe Watson::Assistant do
 
   shared_examples_for "assistant" do |storage|
 
-    manager = Watson::Assistant::Manage.new(
+    manager = Watson::Assistant::Manager.new(
       username: ENV["USERNAME"],
       password: ENV["PASSWORD"],
       workspace_id: ENV["WORKSPACE_ID"],

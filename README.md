@@ -38,7 +38,7 @@ export STORAGE="hash" # Default
 ```ruby
 require 'watson/assistant'
 
-manager = Watson::Assistant::Manage.new(
+manager = Watson::Assistant::Manager.new(
   username: ENV["USERNAME"],
   password: ENV["PASSWORD"],
   workspace_id: ENV["WORKSPACE_ID"],

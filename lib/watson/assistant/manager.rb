@@ -4,7 +4,7 @@ require "watson/assistant/dialog"
 
 module Watson
   module Assistant
-    class Manage
+    class Manager
       def initialize(config)
         storage = config[:storage] || "hash"
         @cnv = Dialog.new(
