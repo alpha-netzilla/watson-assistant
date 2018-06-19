@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "watson/assistant"
+require "./lib/watson/assistant"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -19,18 +19,31 @@ Or install it yourself as:
     $ gem install watson-assistant
 
 ## Usage
+```sh
+export USERNAME="***"
+export PASSWORD="***"
+export WORKSPACE_ID="***"
+
+# Optional
+# Default region is "gateway.watsonplatform.net"
+export REGION="gateway.watsonplatform.net"
+
+# Optional
+# Default storage is ruby hash.
+# You can select ruby hash or a redis server for managing users.
+export STORAGE="hash" # Default
+#export STORAG="redis://127.0.0.1:6379"
+```
 
 ```ruby
 require 'watson/assistant'
 
 manage = Watson::Assistant::ManageDialog.new(
-  username: [username],
-  password: [password],
-  workspace_id: [workspace_id],
-  # Where to link the freely-selected user name with the conversation_id
-  storage: 'hash'  #means that you use Ruby hash. If you restart the app, the info will be disappeared.
-  # OR
-  storage: 'redis://127.0.0.1:6379'  #means that you use exteranl database like redis(This gem currently supports redis only).
+  username: ENV["USERNAME"],
+  password: ENV["PASSWORD"],
+  workspace_id: ENV["WORKSPACE_ID"],
+  region: ENV["REGION"],
+  storage: ENV["STORAGE"]
 )
 
 # Get a greet message from a assistant service.
