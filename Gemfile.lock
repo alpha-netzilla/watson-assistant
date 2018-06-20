@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    watson-assistant (1.0.4)
+    watson-assistant (1.0.5)
 
 GEM
   remote: https://rubygems.org/

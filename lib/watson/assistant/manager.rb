@@ -6,11 +6,25 @@ module Watson
   module Assistant
     class Manager
       def initialize(config)
-        storage = config[:storage] || "hash"
-        @cnv = Dialog.new(
-          config
+        @config = config
+        check = check_config()
+
+        if check == true
+          create_dialog()
+          prepare_storage()
+       end
+
+      end
+
+      def create_dialog
+        @dlg = Dialog.new(
+          @config
         )
-      
+      end
+
+
+      def prepare_storage
+        storage = @config[:storage] || "hash"
         if storage == "hash"
           @users = Hash.new
         else
@@ -19,8 +33,28 @@ module Watson
       end
 
 
-      def users()
-        @users
+      def check_config()
+        if @config[:apikey]
+          if @config[:username] || @config[:password]
+            puts "Error: 'Both API key' and 'Username and Password' are used"
+            return false
+          end
+          @config[:auth] = "apikey:#{@config[:apikey]}"
+
+        elsif @config[:username] && @config[:password]
+          @config[:auth] = "#{@config[:username]}:#{@config[:password]}"
+
+        else
+          puts "Error: Not authorized"
+          return false
+        end
+
+        return true
+      end
+
+
+      def has_dlg?
+        return @dlg
       end
 
 
@@ -38,9 +72,9 @@ module Watson
         future_data = nil
 
         if @users.has_key?(user) == false
-          code, body = @cnv.talk("", "")
+          code, body = @dlg.talk("", "")
         else
-          code, body = @cnv.talk(question, context = @users.fetch(user))
+          code, body = @dlg.talk(question, context = @users.fetch(user))
         end
 
         if code == 200

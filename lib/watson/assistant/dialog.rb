@@ -6,16 +6,14 @@ module Watson
 
     class Dialog      
       def initialize(config)
-        username = config[:username]
-        password = config[:password]
+        auth = config[:auth]
         workspace_id = config[:workspace_id]
         region = config[:region] || "gateway.watsonplatform.net"
- 
-        url = "https://#{username}:#{password}@#{region}/assistant/api"
-        version="2018-02-16"
+
+        url = "https://#{auth}@#{region}/assistant/api"
+        version = "2018-02-16"
         @endpoint = "#{url}/v1/workspaces/#{workspace_id}/message?version=#{version}"
       end
-
     
       def talk(question, context)
         if context == ""
