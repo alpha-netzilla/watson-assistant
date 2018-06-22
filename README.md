@@ -19,22 +19,24 @@ Or install it yourself as:
     $ gem install watson-assistant
 
 ## Usage
+You can use either USERNAME and PASSWORD or API KEY authentication.
+
+### (Username and Passowrd)
+Set the Environment:
 ```sh
 export USERNAME="***"
 export PASSWORD="***"
 export WORKSPACE_ID="***"
 
-# Optional
-# Default region is "gateway.watsonplatform.net"
-export REGION="gateway.watsonplatform.net"
+export REGION="gateway.watsonplatform.net" # Optional: Default region is "gateway.watsonplatform.net"
 
-# Optional
-# Default storage is ruby hash.
 # You can select ruby hash or a redis server for managing users.
-export STORAGE="hash" # Default
+export STORAGE="hash" # Optional: Default storage is ruby hash.
+# or
 #export STORAG="redis://127.0.0.1:6379"
 ```
 
+Send requests:
 ```ruby
 require 'watson/assistant'
 
@@ -59,6 +61,30 @@ puts manager.has_key?("user1")
 
 # Delete the user
 puts manager.delete("user1")
+```
+
+### (API KEY)
+Set the Environment:
+```sh
+export APIKEY="***"
+export WORKSPACE_ID="***"
+export REGION="gateway.watsonplatform.net"
+export STORAGE="hash"
+```
+
+Send requests:
+```ruby
+require 'watson/assistant'
+
+manager = Watson::Assistant::Manager.new(
+  apikey: ENV["APIKEY"],
+  workspace_id: ENV["WORKSPACE_ID"],
+  region: ENV["REGION"],
+  storage: ENV["STORAGE"]
+)
+
+puts response1 = manager.talk("user1", "")
+puts response2 = manager.talk("user1", "I would like you to ...")
 ```
 
 ## Development
