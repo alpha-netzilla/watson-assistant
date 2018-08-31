@@ -12,7 +12,7 @@ module Watson
         if check == true
           create_dialog()
           prepare_storage()
-       end
+        end
 
       end
 
@@ -36,7 +36,7 @@ module Watson
       def check_config()
         if @config[:apikey]
           if @config[:username] || @config[:password]
-            puts "Error: 'Both API key' and 'Username and Password' are used"
+            puts "Error: 'Both API key' and 'Username/Password' are used"
             return false
           end
           @config[:auth] = "apikey:#{@config[:apikey]}"
@@ -92,7 +92,35 @@ module Watson
 
         return {user: user, status_code: code, output: output}.to_json
       end
+
+
+      def read_context(user:)
+        context = @users.fetch(user)
+      end
+
+
+      def read_context_section(user:, key:)
+        context = @users.fetch(user)
+        return context[key]
+      end
+
+
+      def update_context_section(user:, key:, value:)
+        context = @users.fetch(user)
+        context[key] = value
+        @users.store(user, context)
+				return context
+      end
+
+
+      def delete_context_section(user:, key:)
+        context = @users.fetch(user)
+        context.delete(key)
+        @users.store(user, context)
+				return context
+      end
     end
+
 
 
     class Redis < ::Redis

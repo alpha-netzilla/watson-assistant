@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe Watson::Assistant do
-
-
   describe "#version" do
     it "has a version number" do
       expect(Watson::Assistant::VERSION).not_to be nil
@@ -12,36 +10,40 @@ RSpec.describe Watson::Assistant do
 
 
   describe "#initialize" do
-    it "invalid config" do
-      manager = Watson::Assistant::Manager.new(
-        apikey: ENV["APIKEY"],
-        username: ENV["USERNAME"],
-        password: ENV["PASSWORD"],
-        workspace_id: ENV["WORKSPACE_ID"],
-        region: ENV["REGION"],
-        storage: ENV["STORAGE"]
-      )
-      expect(manager.has_dlg?).to be nil
+    describe "invalid config" do
+      it "is nil" do
+        manager = Watson::Assistant::Manager.new(
+          apikey: ENV["APIKEY"],
+          username: ENV["USERNAME"],
+          password: ENV["PASSWORD"],
+          workspace_id: ENV["WORKSPACE_ID"],
+          region: ENV["REGION"],
+          storage: ENV["STORAGE"]
+        )
+        expect(manager.has_dlg?).to be nil
+      end
     end
 
-    it "valid config" do
-      manager = Watson::Assistant::Manager.new(
-        username: ENV["USERNAME"],
-        password: ENV["PASSWORD"],
-        workspace_id: ENV["WORKSPACE_ID"],
-        region: ENV["REGION"],
-        storage: ENV["STORAGE"]
-      )
-      expect(manager.has_dlg?).not_to be nil
+
+    describe "valid config" do
+      it "is not nil" do
+        manager = Watson::Assistant::Manager.new(
+          username: ENV["USERNAME"],
+          password: ENV["PASSWORD"],
+          workspace_id: ENV["WORKSPACE_ID"],
+          region: ENV["REGION"],
+          storage: ENV["STORAGE"]
+        )
+        expect(manager.has_dlg?).not_to be nil
+      end
     end
   end
-
 
 
   describe "talk" do
     shared_examples_for "auth" do |manager|
       describe "#talk" do
-        let(:user) {"user1"}
+        user = "user1"
         it "responds a greet message" do
           expect(manager.talk(user, "")).to match(/200/)
         end
@@ -60,7 +62,7 @@ RSpec.describe Watson::Assistant do
       storage: ENV["STORAGE"]
     )
     it_behaves_like "auth", manager
-
+=begin
     manager = Watson::Assistant::Manager.new(
       apikey: ENV["APIKEY"],
       workspace_id: ENV["WORKSPACE_ID"],
@@ -68,6 +70,7 @@ RSpec.describe Watson::Assistant do
       storage: ENV["STORAGE"]
     )
     it_behaves_like "auth", manager
+=end
   end
 
 
@@ -90,22 +93,30 @@ RSpec.describe Watson::Assistant do
       manager.talk(user1, "")
 
       describe "#has_key?" do
-        it "checks if the the user exists" do
-          expect(manager.has_key?(user1)).to eq true
+        context "checks if the the user exists" do
+          it "true" do
+            expect(manager.has_key?(user1)).to eq true
+          end
         end
 
-        it "checks if the the user doesnot exist" do
-          expect(manager.has_key?(user2)).to eq false
+        context "checks if the the user doesnot exist" do
+          it "false" do
+            expect(manager.has_key?(user2)).to eq false
+          end
         end
       end
 
       describe "#delete" do
-        it "checks if the the user exists" do
-          expect(manager.delete(user1)).to include(a_string_starting_with("conversation_id")).or eq(1)
+        context "checks if the the user exists" do
+          it "hash value at hash or 1 at redis" do
+            expect(manager.delete(user1)).to include(a_string_starting_with("conversation_id")).or eq(1)
+          end
         end
 
-        it "checks if the the user doesnot exist" do
-          expect(manager.delete(user2)).to eq(nil).or eq(0)
+        context "checks if the the user doesnot exist" do
+          it "nil at hash or 0 at redis" do
+            expect(manager.delete(user2)).to eq(nil).or eq(0)
+          end
         end
       end
     end
@@ -113,5 +124,56 @@ RSpec.describe Watson::Assistant do
     it_behaves_like "storage", "hash"
     it_behaves_like "storage", "redis://127.0.0.1:6379"
   end
+
+
+  describe "context", type: :hoge do
+    shared_examples_for "storage2" do |location|
+      manager = Watson::Assistant::Manager.new(
+        username: ENV["USERNAME"],
+        password: ENV["PASSWORD"],
+        workspace_id: ENV["WORKSPACE_ID"],
+        region: ENV["REGION"],
+        storage: location
+      )
+      user = "user1"
+      describe "#read_context" do
+        it "all context" do
+          manager.talk(user, "")
+          expect(manager.read_context(user: user)).to include("conversation_id")
+        end
+      end
+
+
+      describe "#read_context_section" do
+        it "context section" do
+          manager.talk(user, "")
+          expect(manager.read_context_section(user: user, key: "conversation_id")).to match(/(\d|\w)+-/)
+        end
+      end
+
+
+      describe "#update_context_section" do
+        it "true" do
+          section = {"my_credentials"=> {
+                       "user": "1367baf8-09af-4a1e-b3b9-d6e4dd94d436",
+                       "password": "BHFIKIjjixRo3tcUHSfJ983nbBksKHfLQWHuNDKGVuNTlE1X7FUYoqCGcHC2RpZB"
+                      }
+                    }
+          manager.talk(user, "")
+          expect(manager.update_context_section(user: user, key: "private", value: section)).to include("conversation_id")
+        end
+      end
+
+      describe "#delete_context_section" do
+        it "true" do
+          expect(manager.delete_context_section(user: user, key: "private")).to include("conversation_id")
+          manager.delete(user)
+        end
+      end
+    end
+    it_behaves_like "storage2", "hash"
+    it_behaves_like "storage2", "redis://127.0.0.1:6379"
+  end
+
 
 end
