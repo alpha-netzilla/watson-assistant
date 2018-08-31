@@ -87,22 +87,46 @@ puts response1 = manager.talk("user1", "")
 puts response2 = manager.talk("user1", "I would like you to ...")
 ```
 
-## Development
+## Advanced usage
+### Edit context variables
+The SDK exposes the access to a context variable.  You can edit a context variable. I 
+The most common use cases to edit a context variable is that when you call cloud function nodes from Watson Assistant instances. You do not have to store credentials in the Watson Assistant workspace. Instead, pass them from the client application as part of context. 
+```ruby
+section = {"my_credentials"=> {
+              "user": "user_for_calling_functions",
+              "password": "password_for_calling_functions"
+            }
+          }
 
+manager.update_context_section(user: "user1", key: "private", value: section))
+
+```
+
+Other use cases to operate a context variable
+```ruby
+manager.read_context(user: "user1")
+manager.read_context_section(user: "user1", key: "conversation_id"
+manager.delete_context_section(user: "user1", key: "private")
+
+```
+
+
+## Development
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-## Contributing
 
+## Contributing
 Bug reports and pull requests are welcome on GitHub at https://github.com/alpha-netzilla/watson-assistant. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
-
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
 
 ## Authors
 * http://alpha-netzilla.blogspot.com/
 
 [wc]: http://www.ibm.com/watson/developercloud/doc/assistant/index.html
+

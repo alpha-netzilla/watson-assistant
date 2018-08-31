@@ -10,7 +10,7 @@ RSpec.describe Watson::Assistant do
 
   describe "#initialize" do
     describe "invalid config" do
-      it "is nil" do
+      it "nil" do
         manager = Watson::Assistant::Manager.new(
           apikey: ENV["APIKEY"],
           username: ENV["USERNAME"],
@@ -25,7 +25,7 @@ RSpec.describe Watson::Assistant do
 
 
     describe "valid config" do
-      it "is not nil" do
+      it "not nil" do
         manager = Watson::Assistant::Manager.new(
           username: ENV["USERNAME"],
           password: ENV["PASSWORD"],
