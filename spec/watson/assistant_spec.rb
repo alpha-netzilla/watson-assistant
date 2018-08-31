@@ -8,7 +8,6 @@ RSpec.describe Watson::Assistant do
   end
 
 
-
   describe "#initialize" do
     describe "invalid config" do
       it "is nil" do
@@ -155,8 +154,8 @@ RSpec.describe Watson::Assistant do
       describe "#update_context_section" do
         it "true" do
           section = {"my_credentials"=> {
-                       "user": "1367baf8-09af-4a1e-b3b9-d6e4dd94d436",
-                       "password": "BHFIKIjjixRo3tcUHSfJ983nbBksKHfLQWHuNDKGVuNTlE1X7FUYoqCGcHC2RpZB"
+                       "user": "user_for_calling_functions",
+                       "password": "password_for_calling_functions"
                       }
                     }
           manager.talk(user, "")

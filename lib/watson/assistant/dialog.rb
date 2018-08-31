@@ -11,7 +11,7 @@ module Watson
         region = config[:region] || "gateway.watsonplatform.net"
 
         url = "https://#{auth}@#{region}/assistant/api"
-        version = "2018-02-16"
+        version = "2018-09-20"
         @endpoint = "#{url}/v1/workspaces/#{workspace_id}/message?version=#{version}"
       end
     
